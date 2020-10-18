@@ -4,15 +4,22 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'dart:async';
 import '../models/item_model.dart';
+import 'repository.dart';
 
-
-class NewsDbProvider{
+class NewsDbProvider implements Source,Cache{
   Database db ;
 
+  NewsDbProvider(){
+    init();
+  }
+  // todo - store and fetch top ids
+Future <List<int>> fetchTopIds(){
+  return null;
+}
 
  void init() async{
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path,"items.db");
+    final path = join(documentsDirectory.path,"items2.db");
 
     db = await openDatabase(
         path,
@@ -28,7 +35,7 @@ class NewsDbProvider{
                     parent INTEGER,
                     kids BLOB,
                     dead INTEGER, 
-                    delated INTEGER,
+                    deleted INTEGER,
                     url TEXT,
                     score INTEGER,
                     title TEXT,
@@ -39,6 +46,7 @@ class NewsDbProvider{
       }
     );
   }
+
 
 
   Future<ItemModel>  fetchItem(int id) async{
@@ -56,7 +64,18 @@ class NewsDbProvider{
   }
 
   Future<int> addItem(ItemModel item){
-    return db.insert("Items", item.toMapForDb());
+    return db.insert(
+        "Items",
+        item.toMapForDb(),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+
+    );
+  }
+
+  Future<int> clear() {
+   return db.delete('Items');
   }
 
 }
+
+final newsDbProvider = NewsDbProvider();

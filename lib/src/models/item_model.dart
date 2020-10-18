@@ -20,18 +20,18 @@ class ItemModel{
 ItemModel(this.id,this.deleted,this.type,this.by,this.time,this.text,this.dead,this.parent,this.kids,this.url,this.score,this.title,this.descendants);
 ItemModel.fromJson(Map<String,dynamic> parsedJson){
   id=parsedJson['id'];
-  deleted = parsedJson['deleted'];
+  deleted = parsedJson['deleted'] ?? false;
   type = parsedJson['type'];
   by = parsedJson['by'];
   time = parsedJson['time'];
-  text = parsedJson['text'];
-  dead = parsedJson['dead'];
+  text = parsedJson['text'] ?? '';
+  dead = parsedJson['dead'] ?? false;
   parent = parsedJson['parent'];
-  kids = parsedJson['kids'];
+  kids = parsedJson['kids'] ?? [];
   url = parsedJson['url'];
   score = parsedJson['score'];
   title = parsedJson['title'];
-  descendants = parsedJson['descendants'];
+  descendants = parsedJson['descendants'] ?? 0;
 
 }
 ItemModel.fromDb(Map<String,dynamic> parsedJson){
@@ -58,7 +58,6 @@ ItemModel.fromDb(Map<String,dynamic> parsedJson){
     "type": type,
     "by": by,
     "time": time,
-    "text": text,
     "dead":  dead ? 1 : 0,
     "parent": parent,
     "kids":  jsonEncode(kids), // BLOB
@@ -69,3 +68,10 @@ ItemModel.fromDb(Map<String,dynamic> parsedJson){
   } ;
  }
 }
+
+
+
+
+
+
+

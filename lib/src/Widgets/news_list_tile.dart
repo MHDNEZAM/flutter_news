@@ -30,17 +30,21 @@ class NewsListTile extends StatelessWidget {
               return LoadingContainer();
             }
 
-            return buildTile(itemSnapshot.data);
+            return buildTile(context,itemSnapshot.data);
           },
         );
       },
     );
   }
 
-  Widget buildTile(ItemModel item) {
+  Widget buildTile(BuildContext context,ItemModel item) {
     return Column(
       children: [
         ListTile(
+          onTap: (){
+            print("${item.id} clicked");
+            Navigator.pushNamed(context, '/news/${item.id}');
+          },
           title: Text(item.title),
           subtitle: Text('${item.score} votes'),
           trailing: Column(
@@ -49,6 +53,7 @@ class NewsListTile extends StatelessWidget {
               Text('${item.descendants}'),
             ],
           ),
+
         ),
         Divider(
           height: 8.0,
